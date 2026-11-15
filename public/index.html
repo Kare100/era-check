@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Era Check</title>
+  <meta name="description" content="Paste a Spotify playlist and find out what era you're in.">
+  <meta property="og:title" content="Era Check">
+  <meta property="og:description" content="Paste a Spotify playlist and find out what era you're in.">
+  <meta name="theme-color" content="#FFE8F3">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='30' cy='30' r='24' fill='%23FF8FCB'/><circle cx='36' cy='34' r='24' fill='%23A3125A' style='mix-blend-mode:multiply'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Familjen+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Era Check home">era check</a>
+    <div class="lang" role="group" aria-label="Roast language">
+      <button type="button" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="sh" aria-pressed="false">Sheng</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="start" id="start">
+      <div class="start-copy">
+        <h1 class="print" aria-label="What era is your playlist in?">
+          <span class="ink-a" aria-hidden="true">What era is your playlist in?</span>
+          <span class="ink-b" aria-hidden="true">What era is your playlist in?</span>
+        </h1>
+        <p class="lede">Paste a Spotify playlist link. We read every song and tell you what's really going on with you.</p>
+
+        <form class="check" id="form" novalidate>
+          <label class="sr-only" for="url">Spotify playlist link</label>
+          <input id="url" name="url" type="url" inputmode="url" autocomplete="off" spellcheck="false"
+                 placeholder="open.spotify.com/playlist/…" required>
+          <button type="submit" class="btn btn-primary">Check my era</button>
+        </form>
+        <p class="error" id="error" role="alert" hidden></p>
+        <p class="hint">Works with public playlists made by people. Spotify's own editorial playlists are locked.</p>
+
+        <div class="samples">
+          <p>No playlist handy? Try one of ours:</p>
+          <div class="sample-list" id="samples"></div>
+        </div>
+      </div>
+
+      <div class="start-preview" aria-hidden="true">
+        <div class="halftone"></div>
+        <div class="preview-wrap" id="preview"></div>
+      </div>
+    </section>
+
+    <section class="loading" id="loading" hidden aria-live="polite">
+      <div class="press" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p id="loading-text">Reading the songs</p>
+    </section>
+
+    <section class="result" id="result" hidden>
+      <div class="result-card" id="result-card"></div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="save">Save image</button>
+        <button type="button" class="btn" id="copy">Copy caption</button>
+        <button type="button" class="btn btn-quiet" id="again">Check another playlist</button>
+      </div>
+      <p class="toast" id="toast" role="status"></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Made in Nairobi by <a href="https://github.com/Kare100">Valerie Mwangi</a>. Not affiliated with Spotify.</p>
+  </footer>
+
+  <template id="card-tpl">
+    <article class="card">
+      <div class="card-top">
+        <span class="card-mark">era check</span>
+        <span class="card-playlist" data-f="playlist"></span>
+      </div>
+      <p class="card-intro">You're in your</p>
+      <h2 class="print era-name">
+        <span class="ink-a" data-f="era"></span>
+        <span class="ink-b" aria-hidden="true" data-f="era"></span>
+      </h2>
+      <p class="card-tagline" data-f="tagline"></p>
+      <div class="sticker"><strong data-f="vibe"></strong><span>vibe score</span></div>
+      <div class="anthem">
+        <p class="anthem-label">Main character song</p>
+        <p class="anthem-song" data-f="song"></p>
+        <p class="anthem-artist" data-f="artist"></p>
+      </div>
+      <dl class="stats">
+        <div><dt>songs</dt><dd data-f="songs"></dd></div>
+        <div><dt>artists</dt><dd data-f="artists"></dd></div>
+        <div><dt>avg year</dt><dd data-f="year"></dd></div>
+      </dl>
+      <blockquote class="roast" data-f="roast"></blockquote>
+      <p class="card-foot" data-f="site"></p>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
+  <script src="eras.js"></script>
+  <script src="samples.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
