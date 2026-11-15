@@ -1,32 +1,32 @@
 # Era Check 🎀
 
-Paste a Spotify playlist and find out what era you're in: Villain Arc, Delulu Romantic, Crying in the Matatu, Nairobi Nights and more. You get a vibe score, your main character song, a roast (in English or Sheng), and a card you can save and post.
+Screenshot your Spotify playlist and find out what era you're in: Villain Arc, Delulu Romantic, Crying in the Matatu, Nairobi Nights and more. You get a vibe score, your main character song, a roast (in English or Sheng), and a card you can save and post.
 
 It's designed like a risograph zine, with raspberry, bubblegum and lilac inks on blush paper and headlines that print slightly out of register.
 
 ## How it works
 
-- `public/`: the whole frontend in plain HTML, CSS and JS, with no build step.
-- `public/eras.js`: the era engine. It scores song titles, artists, release years, explicit tracks and the times songs were added, then picks the strongest era.
-- `api/playlist.js`: a Vercel serverless function that reads public playlists through the Spotify Web API (client-credentials flow, so nobody has to log in).
-- Sample playlists are built in, so the app works even before you add Spotify keys.
+- `public/`: the whole site in plain HTML, CSS and JS, with no build step and no backend.
+- You upload a screenshot of your playlist and [Tesseract.js](https://github.com/naptha/tesseract.js) reads the song names right in your browser. Screenshots never leave your device.
+- `public/ocr.js` turns the text from the screenshot into songs and artists.
+- `public/eras.js` is the era engine. It scores song titles, artists and explicit tracks, then picks the strongest era.
+- Sample playlists are built in so anyone can try it in one tap.
+
+### Why screenshots and not Spotify links?
+
+Since February 2026, new Spotify developer apps need a Premium account and can't read other people's playlists, so pasting a playlist link isn't possible for new projects. Screenshots work for everyone with no login and no keys.
 
 ## Run it locally
 
-```bash
-npx vercel dev
-```
+Open `public/index.html` in a browser, or serve the folder:
 
-Or just open `public/index.html` and try the sample playlists.
+```bash
+npx serve public
+```
 
 ## Deploy
 
-1. Create an app at [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard) and copy its Client ID and Client Secret.
-2. Import this repo on [vercel.com](https://vercel.com).
-3. Add the environment variables `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET`.
-4. Deploy.
-
-Only public playlists made by people work. Spotify blocks its own editorial playlists from new apps.
+Import the repo on [vercel.com](https://vercel.com) and deploy. No environment variables are needed.
 
 ## Add your own era
 

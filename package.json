@@ -2,6 +2,6 @@
   "name": "era-check",
   "version": "1.0.0",
   "private": true,
-  "description": "Paste a Spotify playlist and find out what era you're in.",
+  "description": "Screenshot your Spotify playlist and find out what era you're in.",
   "engines": { "node": ">=18" }
 }
