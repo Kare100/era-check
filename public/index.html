@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Era Check</title>
-  <meta name="description" content="Paste a Spotify playlist and find out what era you're in.">
+  <meta name="description" content="Screenshot your Spotify playlist and find out what era you're in.">
   <meta property="og:title" content="Era Check">
-  <meta property="og:description" content="Paste a Spotify playlist and find out what era you're in.">
+  <meta property="og:description" content="Screenshot your Spotify playlist and find out what era you're in.">
   <meta name="theme-color" content="#FFE8F3">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='30' cy='30' r='24' fill='%23FF8FCB'/><circle cx='36' cy='34' r='24' fill='%23A3125A' style='mix-blend-mode:multiply'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,16 +30,15 @@
           <span class="ink-a" aria-hidden="true">What era is your playlist in?</span>
           <span class="ink-b" aria-hidden="true">What era is your playlist in?</span>
         </h1>
-        <p class="lede">Paste a Spotify playlist link. We read every song and tell you what's really going on with you.</p>
+        <p class="lede">Screenshot your Spotify playlist and drop it here. We read the songs and tell you what's really going on with you.</p>
 
-        <form class="check" id="form" novalidate>
-          <label class="sr-only" for="url">Spotify playlist link</label>
-          <input id="url" name="url" type="url" inputmode="url" autocomplete="off" spellcheck="false"
-                 placeholder="open.spotify.com/playlist/…" required>
-          <button type="submit" class="btn btn-primary">Check my era</button>
-        </form>
+        <div class="drop" id="drop">
+          <input class="sr-only" id="shots" type="file" accept="image/*" multiple>
+          <label for="shots" class="btn btn-primary">Upload screenshots</label>
+          <p class="drop-note">or drop them here, or paste one</p>
+        </div>
         <p class="error" id="error" role="alert" hidden></p>
-        <p class="hint">Works with public playlists made by people. Spotify's own editorial playlists are locked.</p>
+        <p class="hint">Open your playlist, scroll to the songs, and screenshot. Add up to 5 screenshots for a better read. Your screenshots never leave your device.</p>
 
         <div class="samples">
           <p>No playlist handy? Try one of ours:</p>
@@ -55,7 +54,7 @@
 
     <section class="loading" id="loading" hidden aria-live="polite">
       <div class="press" aria-hidden="true"><span></span><span></span><span></span></div>
-      <p id="loading-text">Reading the songs</p>
+      <p id="loading-text">Reading your screenshot</p>
     </section>
 
     <section class="result" id="result" hidden>
@@ -94,7 +93,7 @@
       <dl class="stats">
         <div><dt>songs</dt><dd data-f="songs"></dd></div>
         <div><dt>artists</dt><dd data-f="artists"></dd></div>
-        <div><dt>avg year</dt><dd data-f="year"></dd></div>
+        <div><dt data-f="thirdLabel"></dt><dd data-f="third"></dd></div>
       </dl>
       <blockquote class="roast" data-f="roast"></blockquote>
       <p class="card-foot" data-f="site"></p>
@@ -102,8 +101,10 @@
   </template>
 
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" defer></script>
   <script src="eras.js"></script>
   <script src="samples.js"></script>
+  <script src="ocr.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

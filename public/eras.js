@@ -162,8 +162,8 @@
     const artists = Object.entries(artistCount).sort((a, b) => b[1] - a[1]);
     const uniqueArtists = artists.length;
     const [topArtist, topCount] = artists[0] || ["nobody", 0];
-    const avgYear = years.length ? Math.round(years.reduce((s, y) => s + y, 0) / years.length) : now;
-    const age = Math.max(0, now - avgYear);
+    const avgYear = years.length ? Math.round(years.reduce((s, y) => s + y, 0) / years.length) : null;
+    const age = avgYear ? Math.max(0, now - avgYear) : 0;
     const avgPop = pops.length ? pops.reduce((s, p) => s + p, 0) / pops.length : null;
     const lateHour = Object.entries(hourCount)
       .filter(([h]) => +h < 5)
@@ -173,6 +173,7 @@
       n,
       sadPct: pct(sad, n),
       lovePct: pct(love, n),
+      feelsPct: pct(sad + love, n),
       villainPct: pct(villain + explicit * 0.6, n),
       healPct: pct(heal, n),
       explicitPct: pct(explicit, n),

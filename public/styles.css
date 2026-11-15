@@ -144,28 +144,6 @@ main { flex: 1; width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 clamp
 
 .lede { font-size: var(--s1); line-height: 1.45; max-width: 34ch; margin: 1.5rem 0 2rem; }
 
-.check {
-  display: flex;
-  gap: .5rem;
-  max-width: 560px;
-  padding: .4rem;
-  background: var(--field);
-  border: 2px solid var(--page-text);
-  border-radius: 999px;
-}
-.check input {
-  flex: 1;
-  min-width: 0;
-  font: 500 var(--s0)/1.2 var(--text);
-  color: var(--page-text);
-  background: transparent;
-  border: 0;
-  padding: .75rem 1rem;
-}
-.check input::placeholder { color: currentColor; opacity: .5; }
-.check input:focus { outline: none; }
-.check:focus-within { outline: 3px solid var(--pink); outline-offset: 3px; }
-
 .btn {
   font: 700 var(--s0)/1 var(--text);
   color: var(--blue);
@@ -186,6 +164,24 @@ main { flex: 1; width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 clamp
 .btn-primary:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--pink); }
 .btn-quiet { background: transparent; border-color: transparent; text-decoration: underline; text-underline-offset: 4px; color: var(--page-text); }
 .btn[disabled] { opacity: .6; cursor: progress; }
+
+/* Screenshot drop zone */
+.drop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1rem;
+  max-width: 560px;
+  padding: 1.1rem;
+  background: var(--field);
+  border: 2px dashed var(--page-text);
+  border-radius: 22px;
+  transition: background .15s ease;
+}
+.drop.over { background: var(--pink); border-style: solid; }
+.drop label { cursor: pointer; }
+.drop:focus-within label { outline: 3px solid var(--pink); outline-offset: 3px; }
+.drop-note { margin: 0; font-weight: 600; }
 
 .error {
   max-width: 560px;
@@ -358,8 +354,7 @@ main { flex: 1; width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 clamp
   .halftone { width: 110%; }
 }
 @media (max-width: 480px) {
-  .check { flex-direction: column; border-radius: 22px; }
-  .check .btn { width: 100%; }
+  .drop label { flex: 1 1 100%; text-align: center; }
   .hint { margin-left: .25rem; }
   .actions .btn { flex: 1 1 100%; }
 }
