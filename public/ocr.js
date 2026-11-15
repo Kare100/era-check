@@ -10,6 +10,7 @@
     return line
       .replace(/[|•·»«©®™_~`^*{}\[\]<>]+/g, " ")
       .replace(/(\s*(\.{2,}|…|⋯|·{2,}|ooo|eee))+\s*$/i, "")
+      .replace(/\s+[.,:;'"\-–—=]+$/, "")
       .replace(/\s{2,}/g, " ")
       .trim();
   }
