@@ -315,12 +315,30 @@ main { flex: 1; width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 clamp
 .card-foot { margin: 3.5cqi 0 0; font-size: 2.9cqi; font-weight: 600; opacity: .8; }
 
 /* Loading */
-.loading { display: grid; place-items: center; gap: 1.5rem; min-height: 60vh; text-align: center; font-size: var(--s1); font-weight: 600; }
+.loading { display: grid; place-items: center; align-content: center; gap: 1.25rem; min-height: 60vh; text-align: center; font-size: var(--s1); font-weight: 600; }
 .press { display: flex; gap: 10px; }
 .press span { width: 22px; height: 22px; border-radius: 50%; background: var(--pink); animation: press 1s ease-in-out infinite; }
 .press span:nth-child(2) { background: var(--yellow); animation-delay: .15s; }
 .press span:nth-child(3) { background: var(--page-text); animation-delay: .3s; }
 @keyframes press { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
+
+.progress {
+  position: relative;
+  width: min(320px, 80vw);
+  height: 1.75rem;
+  border: 2px solid var(--page-text);
+  border-radius: 999px;
+  background: var(--field);
+  overflow: hidden;
+}
+.progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--pink);
+  transition: width .25s ease-out;
+}
+.progress-pct { position: relative; display: block; font-size: var(--s-1); font-weight: 700; line-height: calc(1.75rem - 4px); }
 
 /* Review: check the songs */
 .review { display: grid; gap: 1rem; width: min(560px, 100%); margin: 0 auto; padding: 1rem 0 4rem; }

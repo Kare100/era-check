@@ -4,6 +4,7 @@
     start: $("start"), loading: $("loading"), review: $("review"), result: $("result"),
     songList: $("song-list"), reviewCount: $("review-count"), reviewNote: $("review-note"),
     make: $("make"), reviewBack: $("review-back"),
+    progress: $("progress"), progressFill: $("progress-fill"), progressPct: $("progress-pct"),
     drop: $("drop"), shots: $("shots"), error: $("error"), samples: $("samples"),
     preview: $("preview"), resultCard: $("result-card"), loadingText: $("loading-text"),
     save: $("save"), copy: $("copy"), again: $("again"), toast: $("toast"),
@@ -90,6 +91,7 @@
   async function run(getPlaylist, label, { review = false } = {}) {
     els.error.hidden = true;
     els.loadingText.textContent = label || "Reading your screenshot";
+    setProgress(review ? 0 : null);
     show("loading");
     try {
       const [playlist] = await Promise.all([getPlaylist(), wait(1100)]);
@@ -99,6 +101,16 @@
     } catch (e) {
       showError(e.code || "no_songs");
     }
+  }
+
+  // ---- Progress bar (screenshots only; null hides it) ----
+  function setProgress(pct) {
+    els.progress.hidden = pct === null;
+    if (pct === null) return;
+    const value = Math.max(0, Math.min(100, Math.round(pct)));
+    els.progress.setAttribute("aria-valuenow", String(value));
+    els.progressFill.style.width = `${value}%`;
+    els.progressPct.textContent = `${value}%`;
   }
 
   // ---- Review step ----
@@ -179,7 +191,8 @@
   }
 
   let worker = null;
-  async function getWorker(onProgress) {
+  let onProgress = () => {};
+  async function getWorker() {
     if (!window.Tesseract) {
       const err = new Error("reader"); err.code = "reader"; throw err;
     }
@@ -196,12 +209,11 @@
     if (!images.length) { const e = new Error("not_image"); e.code = "not_image"; throw e; }
 
     let done = 0;
-    const progress = (p) => {
-      const pct = Math.round(((done + p) / images.length) * 100);
-      els.loadingText.textContent = `Reading your screenshot${images.length > 1 ? "s" : ""}… ${pct}%`;
-    };
+    els.loadingText.textContent = `Reading your screenshot${images.length > 1 ? "s" : ""}…`;
+    // The worker is reused across uploads, so point its progress at this batch.
+    onProgress = (p) => setProgress(((done + p) / images.length) * 100);
     let w;
-    try { w = await getWorker(progress); } catch (e) { e.code = e.code || "reader"; throw e; }
+    try { w = await getWorker(); } catch (e) { e.code = e.code || "reader"; throw e; }
 
     let name = null;
     let tracks = [];

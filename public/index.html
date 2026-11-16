@@ -52,9 +52,13 @@
       </div>
     </section>
 
-    <section class="loading" id="loading" hidden aria-live="polite">
+    <section class="loading" id="loading" hidden>
       <div class="press" aria-hidden="true"><span></span><span></span><span></span></div>
-      <p id="loading-text">Reading your screenshot</p>
+      <p id="loading-text" aria-live="polite">Reading your screenshot</p>
+      <div class="progress" id="progress" role="progressbar" aria-labelledby="loading-text" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+        <span class="progress-fill" id="progress-fill"></span>
+        <span class="progress-pct" id="progress-pct" aria-hidden="true">0%</span>
+      </div>
     </section>
 
     <section class="review" id="review" hidden aria-labelledby="review-title">
