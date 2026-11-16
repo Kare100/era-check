@@ -1,7 +1,9 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const els = {
-    start: $("start"), loading: $("loading"), result: $("result"),
+    start: $("start"), loading: $("loading"), review: $("review"), result: $("result"),
+    songList: $("song-list"), reviewCount: $("review-count"), reviewNote: $("review-note"),
+    make: $("make"), reviewBack: $("review-back"),
     drop: $("drop"), shots: $("shots"), error: $("error"), samples: $("samples"),
     preview: $("preview"), resultCard: $("result-card"), loadingText: $("loading-text"),
     save: $("save"), copy: $("copy"), again: $("again"), toast: $("toast"),
@@ -49,7 +51,7 @@
   }
 
   function show(section) {
-    for (const k of ["start", "loading", "result"]) els[k].hidden = k !== section;
+    for (const k of ["start", "loading", "review", "result"]) els[k].hidden = k !== section;
     window.scrollTo({ top: 0 });
   }
 
@@ -72,26 +74,83 @@
   // ---- Flow ----
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  async function run(getPlaylist, label) {
+  function showCard(playlist) {
+    const result = EraEngine.analyze(playlist);
+    current = { playlist, result };
+    renderResult();
+    show("result");
+    els.resultCard.classList.remove("stamp");
+    void els.resultCard.offsetWidth;
+    els.resultCard.classList.add("stamp");
+    els.toast.textContent = "";
+    els.save.focus({ preventScroll: true });
+  }
+
+  // Screenshots go through a review step first, so misread songs can be removed.
+  async function run(getPlaylist, label, { review = false } = {}) {
     els.error.hidden = true;
     els.loadingText.textContent = label || "Reading your screenshot";
     show("loading");
     try {
       const [playlist] = await Promise.all([getPlaylist(), wait(1100)]);
       if (!playlist.tracks || playlist.tracks.length < 2) return showError("no_songs");
-      const result = EraEngine.analyze(playlist);
-      current = { playlist, result };
-      renderResult();
-      show("result");
-      els.resultCard.classList.remove("stamp");
-      void els.resultCard.offsetWidth;
-      els.resultCard.classList.add("stamp");
-      els.toast.textContent = "";
-      els.save.focus({ preventScroll: true });
+      if (review) showReview(playlist);
+      else showCard(playlist);
     } catch (e) {
       showError(e.code || "no_songs");
     }
   }
+
+  // ---- Review step ----
+  let reviewing = null;
+
+  function renderReview() {
+    const tracks = reviewing.tracks;
+    els.reviewCount.textContent = `${tracks.length} song${tracks.length === 1 ? "" : "s"}`;
+    els.songList.replaceChildren(
+      ...tracks.map((t, i) => {
+        const li = document.createElement("li");
+        const text = document.createElement("div");
+        const name = document.createElement("span");
+        name.className = "song-name";
+        name.textContent = t.name;
+        const artist = document.createElement("span");
+        artist.className = "song-artist";
+        artist.textContent = t.artists.length ? t.artists.join(", ") : "Unknown artist";
+        text.append(name, artist);
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "song-remove";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", `Remove ${t.name}`);
+        remove.addEventListener("click", () => removeSong(i));
+        li.append(text, remove);
+        return li;
+      })
+    );
+    const enough = tracks.length >= 2;
+    els.make.disabled = !enough;
+    els.reviewNote.textContent = enough
+      ? "Remove anything we misread, then make your card."
+      : "Keep at least 2 songs to make a card, or try another screenshot.";
+  }
+
+  function removeSong(i) {
+    reviewing.tracks.splice(i, 1);
+    renderReview();
+    const buttons = els.songList.querySelectorAll(".song-remove");
+    (buttons[i] || buttons[i - 1] || els.make).focus();
+  }
+
+  function showReview(playlist) {
+    reviewing = { ...playlist, tracks: playlist.tracks.slice() };
+    renderReview();
+    show("review");
+    els.make.focus({ preventScroll: true });
+  }
+
+  els.make.addEventListener("click", () => { if (reviewing) showCard(reviewing); });
+  els.reviewBack.addEventListener("click", () => { show("start"); els.shots.focus(); });
 
   // ---- Screenshot reading (all in the browser) ----
   // Spotify screenshots are light text on dark. Grayscale, invert and upscale them
@@ -165,7 +224,7 @@
       els.error.hidden = false;
       return;
     }
-    run(() => readScreenshots(files), "Reading your screenshot…");
+    run(() => readScreenshots(files), "Reading your screenshot…", { review: true });
   }
 
   els.shots.addEventListener("change", () => { handleFiles(els.shots.files); els.shots.value = ""; });

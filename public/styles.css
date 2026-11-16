@@ -322,6 +322,46 @@ main { flex: 1; width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 clamp
 .press span:nth-child(3) { background: var(--page-text); animation-delay: .3s; }
 @keyframes press { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
 
+/* Review: check the songs */
+.review { display: grid; gap: 1rem; width: min(560px, 100%); margin: 0 auto; padding: 1rem 0 4rem; }
+.review-title { margin: 0; font-family: var(--display); font-weight: 400; font-size: var(--s2); line-height: 1.1; }
+.review-note { margin: 0; font-weight: 600; }
+.song-list {
+  list-style: none;
+  margin: 0;
+  padding: .35rem;
+  background: var(--field);
+  border: 2px solid var(--page-text);
+  border-radius: 22px;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+.song-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .6rem .75rem;
+  border-radius: 14px;
+}
+.song-list li + li { border-top: 1px dashed color-mix(in srgb, var(--page-text) 30%, transparent); }
+.song-list li > div { display: flex; flex-direction: column; min-width: 0; }
+.song-name { font-weight: 700; overflow-wrap: anywhere; }
+.song-artist { font-size: var(--s-1); opacity: .8; overflow-wrap: anywhere; }
+.song-remove {
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 2px solid var(--page-text);
+  background: transparent;
+  color: var(--page-text);
+  font: 700 1.25rem/1 var(--text);
+  cursor: pointer;
+}
+.song-remove:hover { background: var(--pink); color: var(--blue); border-color: var(--blue); }
+.review .actions { justify-content: flex-start; }
+
 /* Result */
 .result { display: grid; justify-items: center; gap: 1.75rem; padding: 1rem 0 4rem; }
 .result-card { width: min(460px, 100%); }

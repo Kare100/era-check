@@ -57,6 +57,16 @@
       <p id="loading-text">Reading your screenshot</p>
     </section>
 
+    <section class="review" id="review" hidden aria-labelledby="review-title">
+      <h2 class="review-title" id="review-title">We found <span id="review-count"></span></h2>
+      <p class="review-note" id="review-note" aria-live="polite"></p>
+      <ul class="song-list" id="song-list"></ul>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="make">Make my card</button>
+        <button type="button" class="btn btn-quiet" id="review-back">Use different screenshots</button>
+      </div>
+    </section>
+
     <section class="result" id="result" hidden>
       <div class="result-card" id="result-card"></div>
       <div class="actions">
